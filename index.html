@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>⚔️ ตำนานเอลดอเรีย</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#070912;--pan:#0f1424;--pan2:#161d33;--bd:#2a3457;--gold:#f5c542;--hp:#e63946;--mp:#3a86ff;--xp:#43d17a;--txt:#e6eaf5;--dim:#8892ad;--red:#ff4d5e;--grn:#43d17a}
+body{font-family:'Segoe UI','Noto Sans Thai',sans-serif;background:radial-gradient(ellipse at 50% -10%,#1a2242 0%,#070912 60%);color:var(--txt);min-height:100vh;display:flex;justify-content:center;padding:6px;font-size:13px}
+.game{width:100%;max-width:540px;display:flex;flex-direction:column;gap:6px;min-height:calc(100vh - 12px)}
+.top{background:linear-gradient(180deg,var(--pan2),var(--pan));border:1px solid var(--bd);border-radius:12px;padding:8px 10px;display:flex;gap:9px;align-items:center;box-shadow:0 4px 22px #0009}
+.av{width:48px;height:48px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#2a3560,#101524);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:24px}
+.ti{flex:1;min-width:0}
+.tn{font-size:12.5px;font-weight:700;display:flex;gap:6px;align-items:center;white-space:nowrap;overflow:hidden}
+.tn .lv{color:var(--gold);font-size:10.5px;background:#f5c54222;padding:1px 6px;border-radius:6px;border:1px solid #f5c54244}
+.bars{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+.bar{position:relative;height:11px;background:#000c;border-radius:5px;overflow:hidden;border:1px solid #ffffff11}
+.bar>span{position:absolute;inset:0;width:0;transition:width .3s}
+.bar>i{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8.5px;font-style:normal;font-weight:700;text-shadow:0 1px 2px #000}
+.bar.hp>span{background:linear-gradient(90deg,#8b1e2f,#e63946)}
+.bar.mp>span{background:linear-gradient(90deg,#1d4a9e,#3a86ff)}
+.bar.xp{height:7px}.bar.xp>span{background:linear-gradient(90deg,#1e7a4a,#43d17a)}
+.mn{display:flex;flex-direction:column;gap:3px;align-items:flex-end;font-size:10.5px;font-weight:700}
+.mn .g{color:var(--gold)}
+.cont{flex:1;background:var(--pan);border:1px solid var(--bd);border-radius:12px;padding:11px;overflow-y:auto;max-height:calc(100vh - 200px)}
+.cont::-webkit-scrollbar{width:5px}.cont::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+h2.sec{font-size:12px;color:var(--gold);margin-bottom:9px;letter-spacing:1px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--bd);padding-bottom:6px;font-weight:700}
+h2.sec::before{content:'◆';font-size:8px}
+.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.nav-btn{background:var(--pan);border:1px solid var(--bd);border-radius:9px;padding:6px 2px;text-align:center;font-size:9px;cursor:pointer;color:var(--dim);font-weight:600;line-height:1.2;transition:.15s}
+.nav-btn .ic{display:block;font-size:16px;margin-bottom:1px}
+.nav-btn.on{background:linear-gradient(180deg,#2a3560,#151a30);color:var(--gold);border-color:var(--gold);box-shadow:0 0 12px #f5c54233}
+.btn{background:linear-gradient(180deg,#2a3560,#161d33);border:1px solid var(--bd);color:var(--txt);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:.15s}
+.btn:hover:not(:disabled){background:linear-gradient(180deg,#39477a,#1e2742);transform:translateY(-1px)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.gold{background:linear-gradient(180deg,#7a5f15,#3d2f08);border-color:var(--gold);color:var(--gold)}
+.btn.red{background:linear-gradient(180deg,#6b1a26,#3d0f16);border-color:#a33;color:#ff9aa8}
+.btn.grn{background:linear-gradient(180deg,#14503a,#0a2f22);border-color:#2a8;color:#7fe8b8}
+.btn.sm{padding:6px 9px;font-size:11px}
+.btn.xs{padding:4px 7px;font-size:10px}
+.btn.full{width:100%}
+.card{background:var(--pan2);border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:7px;transition:.15s}
+.card.click{cursor:pointer}
+.card.click:hover{border-color:var(--gold);transform:translateX(2px)}
+.card.r1{border-left:3px solid #9aa4bf}.card.r2{border-left:3px solid #43d17a}
+.card.r3{border-left:3px solid #3a86ff}.card.r4{border-left:3px solid #a855f7}
+.card.r5{border-left:3px solid #f5c542}.card.r6{border-left:3px solid #ff4d5e}
+.card.gold-b{border-color:var(--gold);background:linear-gradient(180deg,#3a3050,#1a1f3a)}
+.ct{font-size:12.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cd{font-size:10.5px;color:var(--dim);margin-top:3px;line-height:1.55}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tag{font-size:8.5px;padding:2px 6px;border-radius:20px;background:#ffffff11;border:1px solid #ffffff22;color:var(--dim);display:inline-flex;gap:3px}
+.tag.g{background:#f5c54222;border-color:#f5c54255;color:var(--gold)}
+.tag.r{background:#e6394622;border-color:#e6394655;color:#ff8899}
+.tag.b{background:#3a86ff22;border-color:#3a86ff55;color:#8fc4ff}
+.tag.gn{background:#43d17a22;border-color:#43d17a55;color:#7fe8b8}
+.srow{display:flex;justify-content:space-between;font-size:11.5px;padding:5px 0;border-bottom:1px dashed #ffffff0d}
+.srow:last-child{border-bottom:none}.srow span:last-child{font-weight:700;color:var(--gold)}
+.pbar{height:8px;background:#000a;border-radius:4px;overflow:hidden;border:1px solid #ffffff11;margin-top:4px}
+.pbar>span{display:block;height:100%;background:linear-gradient(90deg,#3a86ff,#43d17a);transition:width .3s}
+.overlay{position:fixed;inset:0;background:#000000e0;backdrop-filter:blur(5px);z-index:100;display:none;align-items:center;justify-content:center;padding:6px}
+.overlay.on{display:flex}
+.cbox{width:100%;max-width:540px;max-height:98vh;background:var(--pan);border:1px solid var(--bd);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 0 80px #000}
+.chead{padding:8px 12px;background:linear-gradient(180deg,#2a1a3a,#101524);border-bottom:1px solid var(--bd);font-size:10.5px;font-weight:700;display:flex;justify-content:space-between;color:var(--gold);letter-spacing:1px}
+.enemies{padding:10px;display:flex;flex-direction:column;gap:7px;overflow-y:auto;max-height:34vh;background:radial-gradient(ellipse at 50% 0%,#1e1a3a,#080a15)}
+.enemy{background:linear-gradient(180deg,#221a30,#161a2c);border:2px solid var(--bd);border-radius:10px;padding:8px 10px;cursor:pointer;transition:.15s;position:relative}
+.enemy.sel{border-color:var(--gold);box-shadow:0 0 14px #f5c54244}
+.enemy.dead{opacity:.28;filter:grayscale(1);cursor:default}
+.ename{font-size:12px;font-weight:700;display:flex;justify-content:space-between;gap:6px}
+.ehp{height:9px;background:#000a;border-radius:5px;overflow:hidden;margin-top:5px;border:1px solid #ffffff11}
+.ehp>span{display:block;height:100%;background:linear-gradient(90deg,#8b1e2f,#e63946);transition:width .3s}
+.dmg{position:absolute;right:12px;top:2px;font-weight:900;font-size:15px;animation:fu .9s forwards;pointer-events:none;text-shadow:0 2px 5px #000;z-index:10}
+@keyframes fu{0%{opacity:0;transform:translateY(8px) scale(.7)}20%{opacity:1;transform:translateY(0) scale(1.15)}100%{opacity:0;transform:translateY(-30px) scale(1)}}
+.clog{padding:8px 12px;height:90px;overflow-y:auto;font-size:11px;line-height:1.7;background:#080a15;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.clog .p{color:#8fc4ff}.clog .e{color:#ff8899}.clog .g{color:#7fe8b8}.clog .y{color:var(--gold)}.clog .d{color:var(--dim)}
+.cpl{padding:9px 12px;background:var(--pan2)}
+.cac{padding:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.cac .btn{flex-direction:column;gap:2px;padding:7px 4px;font-size:10px}
+.cmenu{padding:8px;max-height:40vh;overflow-y:auto;border-top:1px solid var(--bd);background:#0a0e1c}
+.cmenu .btn{width:100%;justify-content:space-between;margin-bottom:5px;text-align:left;font-size:11px}
+.modal{width:100%;max-width:480px;max-height:92vh;background:var(--pan);border:1px solid var(--bd);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.mhead{padding:11px 13px;border-bottom:1px solid var(--bd);font-weight:700;color:var(--gold);display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
+.mbody{padding:12px;overflow-y:auto}.mbody::-webkit-scrollbar{width:5px}.mbody::-webkit-scrollbar-thumb{background:var(--bd);border-radius:3px}
+.pick{background:var(--pan2);border:2px solid var(--bd);border-radius:11px;padding:10px 5px;text-align:center;cursor:pointer;transition:.2s}
+.pick:hover{transform:translateY(-3px);border-color:#4a5799}
+.pick.on{border-color:var(--gold);background:linear-gradient(180deg,#3a3050,#1a1f3a);box-shadow:0 0 22px #f5c54244}
+.pick .ic{font-size:26px}.pick .nm{font-size:11px;font-weight:700;margin-top:4px}
+.pick .ds{font-size:8.5px;color:var(--dim);margin-top:3px;line-height:1.3;min-height:32px}
+input[type=text]{width:100%;background:#080a15;border:1px solid var(--bd);color:var(--txt);padding:9px;border-radius:8px;font-size:12px;font-family:inherit;outline:none}
+input:focus{border-color:var(--gold)}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:9999;background:linear-gradient(180deg,#2a3560,#161d33);border:1px solid var(--gold);color:var(--gold);padding:8px 16px;border-radius:20px;font-size:11.5px;font-weight:700;box-shadow:0 6px 24px #000c;animation:ti .3s;pointer-events:none;max-width:92vw}
+@keyframes ti{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
+.empty{text-align:center;color:var(--dim);font-size:11px;padding:20px 0}
+</style>
+</head>
+<body>
+<div class="game">
+  <div class="top">
+    <div class="av" id="av">❔</div>
+    <div class="ti">
+      <div class="tn"><span id="tn">—</span><span class="lv" id="tl">Lv.1</span></div>
+      <div class="bars">
+        <div class="bar hp"><span id="bh"></span><i id="th">HP</i></div>
+        <div class="bar mp"><span id="bm"></span><i id="tm">MP</i></div>
+        <div class="bar xp"><span id="bx"></span><i id="tx"></i></div>
+      </div>
+    </div>
+    <div class="mn"><div class="g" id="tg">💰 0</div></div>
+  </div>
+  <div class="cont" id="cont"></div>
+  <div class="nav" id="nav">
+    <div class="nav-btn" data-t="city"><span class="ic">🏰</span>เมือง</div>
+    <div class="nav-btn" data-t="map"><span class="ic">🗺️</span>แผนที่</div>
+    <div class="nav-btn" data-t="char"><span class="ic">👤</span>ตัวละคร</div>
+    <div class="nav-btn" data-t="bag"><span class="ic">🎒</span>กระเป๋า</div>
+    <div class="nav-btn" data-t="sys"><span class="ic">⚙️</span>ระบบ</div>
+  </div>
+</div>
+
+<div class="overlay" id="combat">
+  <div class="cbox">
+    <div class="chead"><span id="crd">⚔️ ศึก</span><span id="ctn"></span></div>
+    <div class="enemies" id="el"></div>
+    <div class="clog" id="cl"></div>
+    <div class="cpl">
+      <div class="row" style="justify-content:space-between;font-size:11.5px;font-weight:700"><span id="cn">—</span><span id="cs"></span></div>
+      <div class="bar hp" style="margin-top:5px"><span id="ch"></span><i id="cth"></i></div>
+      <div class="bar mp" style="margin-top:3px"><span id="cm"></span><i id="ctm"></i></div>
+    </div>
+    <div id="caa">
+      <div class="cac" id="cac">
+        <button class="btn sm" data-a="atk"><span>⚔️</span>โจมตี</button>
+        <button class="btn sm" data-a="sk"><span>✨</span>สกิล</button>
+        <button class="btn sm" data-a="it"><span>🧪</span>ไอเทม</button>
+        <button class="btn sm" data-a="fl"><span>🏃</span>หนี</button>
+      </div>
+      <div class="cmenu" id="cmn" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modal">
+  <div class="modal">
+    <div class="mhead"><span id="mt">—</span><button class="btn xs" onclick="closeM()">✕</button></div>
+    <div class="mbody" id="mb"></div>
+  </div>
+</div>
+
+<div class="overlay on" id="create">
+  <div class="modal">
+    <div class="mhead"><span>⚔️ สร้างตัวละคร</span></div>
+    <div class="mbody" id="cb"></div>
+  </div>
+          </div>
+          <script>
+/* ============ UTIL ============ */
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const C=p=>Math.random()<p;
+const K=(v,a,b)=>Math.max(a,Math.min(b,v));
+const P=a=>a[R(0,a.length-1)];
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+const F=n=>n.toLocaleString();
+const toast=(m)=>{const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)};
+
+/* ============ RACES ============ */
+const RACES={
+  human:{name:'มนุษย์',icon:'👤',mods:{str:1,dex:1,int:1,vit:1,luk:1},desc:'สมดุลทุกด้าน'},
+  elf:{name:'เอลฟ์',icon:'🧝',mods:{str:-1,dex:3,int:2,vit:0,luk:1},desc:'ว่องไว ฉลาด'},
+  dwarf:{name:'ดวาร์ฟ',icon:'🧔',mods:{str:2,dex:0,int:-1,vit:4,luk:0},desc:'อึดถึก'},
+  orc:{name:'ออร์ค',icon:'👹',mods:{str:4,dex:-1,int:-2,vit:3,luk:-1},desc:'พละกำลังสูง'},
+  undead:{name:'อันเดด',icon:'💀',mods:{str:1,dex:1,int:2,vit:1,luk:-3},desc:'ไม่รู้เจ็บ'},
+  demon:{name:'ปีศาจ',icon:'😈',mods:{str:2,dex:1,int:3,vit:-1,luk:0},desc:'พลังมืด'}
+};
+
+/* ============ CLASSES ============ */
+const CLASSES={
+  warrior:{name:'นักรบ',icon:'🛡️',desc:'HP สูง ป้องกันแน่น',base:{str:5,dex:2,int:1,vit:5,luk:2},skills:['w1','w2','w3','w4'],wpn:'w_sword',arm:'a_leather',items:{potion_s:5}},
+  mage:{name:'จอมเวท',icon:'🔮',desc:'เวทแรง MP สูง',base:{str:1,dex:3,int:6,vit:2,luk:3},skills:['m1','m2','m3','m4'],wpn:'w_staff',arm:'a_robe',items:{potion_s:3,ether:5}},
+  rogue:{name:'นักโจร',icon:'🗡️',desc:'ว่องไว คริติคอลสูง',base:{str:3,dex:6,int:2,vit:3,luk:5},skills:['r1','r2','r3','r4'],wpn:'w_dagger',arm:'a_leather',items:{potion_s:4,antidote:3}},
+  cleric:{name:'นักบวช',icon:'✨',desc:'ฟื้นฟู รักษา',base:{str:2,dex:2,int:5,vit:4,luk:3},skills:['c1','c2','c3','c4'],wpn:'w_mace',arm:'a_robe',items:{potion_s:5,ether:3}}
+};
+
+/* ============ SKILLS ============ */
+const SKILLS={
+  w1:{name:'ฟันสับ',icon:'🗡️',mp:4,lv:1,type:'phys',power:1.6,desc:'160% ATK'},
+  w2:{name:'ฟันกวาด',icon:'🌀',mp:11,lv:4,type:'phys',power:1.0,all:1,desc:'ทุกศัตรู 100%'},
+  w3:{name:'พุ่งแทงทะลุเกราะ',icon:'💥',mp:15,lv:8,type:'phys',power:2.4,pen:.5,desc:'240% เจาะ DEF'},
+  w4:{name:'ประหารชีวิต',icon:'☠️',mp:30,lv:14,type:'phys',power:3.8,desc:'380% ATK'},
+  m1:{name:'ลูกไฟ',icon:'🔥',mp:5,lv:1,type:'mag',power:1.7,desc:'170% MAG'},
+  m2:{name:'รักษา',icon:'💚',mp:9,lv:2,type:'heal',power:2.2,self:1,desc:'ฟื้น HP 220%'},
+  m3:{name:'สายฟ้าฟาด',icon:'⚡',mp:13,lv:6,type:'mag',power:2.4,stun:.35,desc:'240% + มึน'},
+  m4:{name:'อุกกาบาต',icon:'☄️',mp:28,lv:12,type:'mag',power:2.3,all:1,desc:'ทุกศัตรู 230%'},
+  r1:{name:'แทงลับ',icon:'🔪',mp:4,lv:1,type:'phys',power:1.5,crit:.35,desc:'150% คริติคอล'},
+  r2:{name:'มีดอาบพิษ',icon:'🧪',mp:9,lv:3,type:'phys',power:1.1,psn:3,desc:'พิษ 3 เทิร์น'},
+  r3:{name:'ระบำใบมีด',icon:'🌪️',mp:17,lv:8,type:'phys',power:.9,hits:3,desc:'3 hit × 90%'},
+  r4:{name:'สังหารเงา',icon:'🌑',mp:28,lv:14,type:'phys',power:3.3,crit:.45,desc:'330% คริติคอล'},
+  c1:{name:'ค้อนศักดิ์สิทธิ์',icon:'🔨',mp:5,lv:1,type:'mag',power:1.6,desc:'160% MAG'},
+  c2:{name:'รักษา',icon:'💚',mp:10,lv:2,type:'heal',power:2.5,self:1,desc:'ฟื้น HP 250%'},
+  c3:{name:'พรจากสวรรค์',icon:'✨',mp:14,lv:6,type:'buff',buff:{atk:.4,mag:.4,turns:4},self:1,desc:'ATK/MAG +40%'},
+  c4:{name:'พิพากษา',icon:'⚖️',mp:32,lv:14,type:'mag',power:3.0,all:1,desc:'ทุกศัตรู 300%'}
+};
+            /* ============ ITEMS ============ */
+const ITEMS={
+  potion_s:{name:'ยารักษาเล็ก',icon:'🧪',type:'use',price:30,hp:80,desc:'HP +80'},
+  potion_m:{name:'ยารักษากลาง',icon:'⚗️',type:'use',price:90,hp:250,desc:'HP +250'},
+  potion_l:{name:'ยารักษาใหญ่',icon:'🍯',type:'use',price:220,hp:700,desc:'HP +700'},
+  ether:{name:'ยามานา',icon:'🔮',type:'use',price:70,mp:60,desc:'MP +60'},
+  ether_l:{name:'ยามานาใหญ่',icon:'💎',type:'use',price:200,mp:200,desc:'MP +200'},
+  antidote:{name:'ยาแก้พิษ',icon:'💊',type:'use',price:25,cure:1,desc:'ล้างพิษ'},
+  phoenix:{name:'ขนนกฟีนิกซ์',icon:'🪶',type:'use',price:350,revive:.5,desc:'ชุบชีวิต HP 50%'},
+  w_wood:{name:'ดาบไม้',icon:'🗡️',type:'weapon',price:30,atk:6,r:1,desc:'ATK +6'},
+  w_dagger:{name:'กริชสนิม',icon:'🔪',type:'weapon',price:90,atk:5,dex:3,luk:4,r:1,desc:'ATK+5 DEX+3 LUK+4'},
+  w_sword:{name:'ดาบเหล็ก',icon:'⚔️',type:'weapon',price:280,atk:14,str:3,r:2,desc:'ATK+14 STR+3'},
+  w_staff:{name:'คทาไม้โอ๊ค',icon:'🪄',type:'weapon',price:260,mag:15,mp:10,r:2,desc:'MAG+15 MP+10'},
+  w_mace:{name:'ค้อนศักดิ์สิทธิ์',icon:'🔨',type:'weapon',price:250,mag:13,str:2,r:2,desc:'MAG+13 STR+2'},
+  w_axe:{name:'ขวานศึก',icon:'🪓',type:'weapon',price:560,atk:24,str:5,r:3,desc:'ATK+24 STR+5'},
+  w_katana:{name:'ดาบซามูไร',icon:'🗡️',type:'weapon',price:1100,atk:32,dex:8,r:4,desc:'ATK+32 DEX+8'},
+  w_dragon:{name:'ดาบฟันมังกร',icon:'⚔️',type:'weapon',price:2400,atk:44,str:12,r:5,desc:'ATK+44 STR+12'},
+  w_excal:{name:'เอ็กซ์คาลิเบอร์',icon:'🗡️',type:'weapon',price:15000,atk:80,str:25,r:6,desc:'อาวุธในตำนาน'},
+  a_cloth:{name:'เสื้อผ้า',icon:'👕',type:'armor',price:40,def:3,r:1,desc:'DEF+3'},
+  a_leather:{name:'เกราะหนัง',icon:'🥋',type:'armor',price:210,def:10,vit:3,hp:15,r:2,desc:'DEF+10 VIT+3 HP+15'},
+  a_robe:{name:'ชุดจอมเวท',icon:'🧥',type:'armor',price:560,def:9,int:5,mag:6,mp:30,r:3,desc:'DEF+9 INT+5 MAG+6'},
+  a_chain:{name:'เกราะโซ่',icon:'🛡️',type:'armor',price:620,def:20,vit:4,r:3,desc:'DEF+20 VIT+4'},
+  a_plate:{name:'เกราะเหล็กหนา',icon:'🛡️',type:'armor',price:1100,def:34,vit:8,hp:60,r:4,desc:'DEF+34 HP+60'},
+  a_dragon:{name:'เกราะเกล็ดมังกร',icon:'🐲',type:'armor',price:4200,def:52,vit:15,hp:150,r:5,desc:'DEF+52 HP+150'},
+  ac_ring:{name:'แหวนทองแดง',icon:'💍',type:'acc',price:170,luk:6,r:2,desc:'LUK+6'},
+  ac_amulet:{name:'amulet ชีวิต',icon:'📿',type:'acc',price:340,hp:60,mp:20,r:2,desc:'HP+60 MP+20'},
+  ac_boots:{name:'รองเท้าเงา',icon:'👢',type:'acc',price:420,spd:7,dex:3,r:3,desc:'SPD+7 DEX+3'},
+  ac_crown:{name:'มงกุฎราชันย์',icon:'👑',type:'acc',price:8000,atk:20,mag:20,def:20,luk:15,r:6,desc:'ทุกอย่าง +20'}
+};
+
+/* ============ ENEMIES ============ */
+const ENEMIES={
+  slime:{name:'สไลม์',icon:'🟢',hp:40,atk:8,def:4,mag:3,spd:5,luk:2,exp:15,gold:9,skills:['tackle'],drops:[['potion_s',.25]]},
+  rat:{name:'หนูยักษ์',icon:'🐀',hp:32,atk:11,def:2,mag:2,spd:10,luk:6,exp:18,gold:11,skills:['bite'],drops:[['antidote',.15]]},
+  wolf:{name:'หมาป่าดำ',icon:'🐺',hp:62,atk:15,def:6,mag:3,spd:12,luk:7,exp:33,gold:19,skills:['bite','claw'],drops:[['potion_s',.3]]},
+  goblin:{name:'ก็อบลิน',icon:'👺',hp:95,atk:22,def:11,mag:5,spd:11,luk:8,exp:58,gold:38,skills:['claw','smash'],drops:[['potion_s',.35]]},
+  spider:{name:'แมงมุมยักษ์',icon:'🕷️',hp:82,atk:24,def:9,mag:7,spd:15,luk:10,exp:64,gold:42,skills:['bite','web'],drops:[['antidote',.3]]},
+  skeleton:{name:'โครงกระดูก',icon:'💀',hp:175,atk:38,def:20,mag:8,spd:13,luk:8,exp:130,gold:85,skills:['boneCrush','claw'],drops:[['potion_m',.3]]},
+  golem:{name:'โกเลมหิน',icon:'🗿',hp:290,atk:44,def:38,mag:6,spd:6,luk:4,exp:195,gold:130,skills:['smash'],drops:[['potion_m',.4]]},
+  dragonkin:{name:'นักรบมังกร',icon:'🐲',hp:340,atk:58,def:32,mag:24,spd:17,luk:12,exp:310,gold:220,skills:['claw','fireball'],drops:[['potion_l',.5]]},
+  dragon:{name:'🐉 มังกรเพลิง',icon:'🐉',hp:1100,atk:72,def:48,mag:64,spd:20,luk:18,exp:2000,gold:1800,skills:['fireball','claw'],boss:1,drops:[['phoenix',1]]}
+};
+
+/* ============ ENEMY SKILLS ============ */
+const ESK={
+  tackle:{name:'กระแทก',power:1.0},bite:{name:'กัด',power:1.2},
+  claw:{name:'ตะปบ',power:1.35},web:{name:'ใย',power:.7,slow:1},
+  fireball:{name:'ลูกไฟ',power:1.5,el:'mag'},boneCrush:{name:'ทุบกระดูก',power:1.45},
+  smash:{name:'ทุบแหลก',power:1.65}
+};
+
+/* ============ AREAS ============ */
+const AREAS={
+  meadow:{name:'ทุ่งหญ้า',icon:'🌾',lvReq:1,pool:['slime','rat','wolf'],max:2,desc:'จุดเริ่มต้น'},
+  forest:{name:'ป่ามืด',icon:'🌲',lvReq:4,pool:['goblin','spider'],max:3,desc:'ก็อบลินชุม'},
+  cave:{name:'ถ้ำคริสตัล',icon:'🕳️',lvReq:8,pool:['skeleton','golem'],max:3,desc:'กระดูกและหิน'},
+  peak:{name:'ยอดเขามังกร',icon:'🌋',lvReq:13,pool:['dragonkin'],max:3,desc:'ที่อยู่มังกร',boss:'dragon'}
+};
+
+/* ============ QUESTS ============ */
+const QUESTS=[
+  {id:'q1',name:'ปราบสไลม์',target:'slime',cnt:5,gold:150,exp:80,items:[['potion_s',5]]},
+  {id:'q2',name:'ล่าหมาป่า',target:'wolf',cnt:8,gold:400,exp:280,items:[['a_leather',1]]},
+  {id:'q3',name:'ก็อบลินวายร้าย',target:'goblin',cnt:10,gold:800,exp:700,items:[['w_axe',1]]},
+  {id:'q4',name:'กองทัพกระดูก',target:'skeleton',cnt:12,gold:1500,exp:1500,items:[['a_plate',1]]},
+  {id:'q5',name:'ล้มมังกร',target:'dragon',cnt:1,gold:8000,exp:6000,items:[['ac_crown',1]]}
+];
+
+/* ============ SHOP ============ */
+const SHOP=['potion_s','potion_m','potion_l','ether','ether_l','antidote','phoenix','w_sword','w_staff','w_mace','w_axe','w_katana','a_leather','a_robe','a_chain','ac_ring','ac_amulet','ac_boots'];
+/* ============ STATE ============ */
+let hero=null,G=null,tab='city',cb=null,create={race:'human',cls:'warrior'};
+
+/* ============ CREATE NEW GAME ============ */
+function newGame(cls,race,name){
+  hero={name,cls,race,lv:1,exp:0,hp:0,mp:0,stats:{...CLASSES[cls].base},status:{}};
+  G={inv:{...CLASSES[cls].items},equip:{weapon:CLASSES[cls].wpn,armor:CLASSES[cls].arm},
+    gold:150,quests:[],done:[],prog:{},kills:{},killsTotal:0,area:'meadow',flags:{}};
+  hero.hp=maxHp();hero.mp=maxMp();
+}
+
+/* ============ STAT HELPERS ============ */
+function eqB(s){let v=0;for(const k in G.equip){const i=G.equip[k];if(i&&ITEMS[i]&&ITEMS[i][s])v+=ITEMS[i][s]}return v}
+function st(s){return (hero.stats[s]||0)+eqB(s)+(RACES[hero.race].mods[s]||0)}
+function maxHp(){return Math.floor(60+st('vit')*10+st('str')*2+hero.lv*8)}
+function maxMp(){return Math.floor(30+st('int')*6+hero.lv*4)}
+function atk(){return Math.floor(8+st('str')*2+hero.lv*1.5)}
+function mag(){return Math.floor(8+st('int')*2+hero.lv*1.5)}
+function def(){return Math.floor(4+st('vit')*1.2+hero.lv*0.8)}
+function spd(){return Math.floor(6+st('dex')*0.7+hero.lv*0.4)}
+function crit(){return K(3+st('dex')*.35+st('luk')*.4,0,60)}
+function dodge(){return K(2+st('dex')*.25+st('luk')*.15,0,40)}
+function nxt(){return Math.floor(30*Math.pow(hero.lv,1.55))}
+function addIt(i,n=1){G.inv[i]=(G.inv[i]||0)+n}
+function rmIt(i,n=1){if((G.inv[i]||0)<n)return false;G.inv[i]-=n;if(G.inv[i]<=0)delete G.inv[i];return true}
+function cntIt(i){return G.inv[i]||0}
+
+/* ============ CREATE UI ============ */
+function renderCreate(){
+  let h='<div style="font-size:11px;color:var(--dim);margin-bottom:5px">ชื่อนักผจญภัย</div>';
+  h+='<input type="text" id="inn" maxlength="12" value="อัลเดอร์" placeholder="ใส่ชื่อ...">';
+  h+='<h3 style="font-size:11px;color:var(--dim);margin:12px 0 6px">เลือกเผ่า</h3><div class="grid3">';
+  for(const k in RACES){const r=RACES[k];
+    h+=`<div class="pick ${create.race===k?'on':''}" onclick="create.race='${k}';renderCreate()">
+      <div class="ic">${r.icon}</div><div class="nm">${r.name}</div><div class="ds">${r.desc}</div></div>`}
+  h+='</div><h3 style="font-size:11px;color:var(--dim);margin:12px 0 6px">เลือกอาชีพ</h3><div class="grid2">';
+  for(const k in CLASSES){const c=CLASSES[k];
+    h+=`<div class="pick ${create.cls===k?'on':''}" onclick="create.cls='${k}';renderCreate()">
+      <div class="ic">${c.icon}</div><div class="nm">${c.name}</div><div class="ds">${c.desc}</div></div>`}
+  h+='</div>';
+  const c=CLASSES[create.cls],r=RACES[create.race];
+  h+=`<div class="card" style="margin-top:12px">
+    <div class="ct"><span>ตัวอย่างค่าสถานะ</span></div>
+    <div class="cd">STR ${c.base.str+r.mods.str} • DEX ${c.base.dex+r.mods.dex} • INT ${c.base.int+r.mods.int}<br>
+    VIT ${c.base.vit+r.mods.vit} • LUK ${c.base.luk+r.mods.luk}</div></div>`;
+  h+='<button class="btn gold full" style="padding:12px;margin-top:8px" id="bstart">🚀 เริ่มการผจญภัย</button>';
+  $('#cb').innerHTML=h;
+  $('#bstart').onclick=()=>{
+    const nm=$('#inn').value.trim()||'นักผจญภัย';
+    newGame(create.cls,create.race,nm);
+    $('#create').classList.remove('on');
+    render();renderTop();
+  };
+}
+
+/* ============ TOP BAR ============ */
+function renderTop(){
+  if(!hero)return;
+  const c=CLASSES[hero.cls];
+  $('#av').textContent=c.icon;
+  $('#tn').textContent=hero.name;
+  $('#tl').textContent='Lv.'+hero.lv;
+  const mh=maxHp(),mm=maxMp();
+  hero.hp=K(hero.hp,0,mh);hero.mp=K(hero.mp,0,mm);
+  $('#bh').style.width=(hero.hp/mh*100)+'%';
+  $('#th').textContent=`HP ${hero.hp}/${mh}`;
+  $('#bm').style.width=(hero.mp/mm*100)+'%';
+  $('#tm').textContent=`MP ${hero.mp}/${mm}`;
+  $('#bx').style.width=(hero.exp/nxt()*100)+'%';
+  $('#tx').textContent=`EXP ${hero.exp}/${nxt()}`;
+  $('#tg').textContent='💰 '+F(G.gold);
+}
+
+/* ============ MAIN RENDER ============ */
+function render(){
+  if(!hero)return;
+  renderTop();
+  $$('.nav-btn').forEach(t=>t.classList.toggle('on',t.dataset.t===tab));
+  const c=$('#cont');
+  if(tab==='city')c.innerHTML=vCity();
+  else if(tab==='map')c.innerHTML=vMap();
+  else if(tab==='char')c.innerHTML=vChar();
+  else if(tab==='bag')c.innerHTML=vBag();
+  else if(tab==='quests')c.innerHTML=vQuests();
+  else if(tab==='sys')c.innerHTML=vSys();
+}
+
+/* ============ VIEWS ============ */
+function vCity(){
+  const rc=Math.floor(30+hero.lv*15);
+  return `<h2 class="sec">🏰 เมืองเอลดอเรีย</h2>
+  <div class="card gold-b">
+    <div class="ct"><span>${CLASSES[hero.cls].icon} ${hero.name}</span><span class="tag g">${RACES[hero.race].name}</span></div>
+    <div class="cd">HP ${hero.hp}/${maxHp()} • MP ${hero.mp}/${maxMp()}</div>
+    <div class="pbar"><span style="width:${hero.exp/nxt()*100}%"></span></div>
+  </div>
+  <div class="grid2">
+    <div class="card click" onclick="shop()"><div class="ct"><span>🛒 ร้านค้า</span></div><div class="cd">ซื้อ-ขายไอเทม</div></div>
+    <div class="card click" onclick="inn(${rc})"><div class="ct"><span>🛏️ โรงเตี๊ยม</span></div><div class="cd">พักฟื้น ${rc}💰</div></div>
+    <div class="card click" onclick="tab='quests';render()"><div class="ct"><span>📜 ภารกิจ</span></div><div class="cd">ล่ามอนสเตอร์</div></div>
+    <div class="card click" onclick="tab='map';render()"><div class="ct"><span>🚪 ออกเดินทาง</span></div><div class="cd">ไปแผนที่</div></div>
+  </div>
+  <div class="card">
+    <div class="ct"><span>📰 ข่าวสาร</span></div>
+    <div class="cd">• มังกรเพลิงตื่นแล้วที่ยอดเขา<br>• ปราบมอนสเตอร์เพื่อเก็บเลเวล</div>
+  </div>`;
+}
+
+function vMap(){
+  let h='<h2 class="sec">🗺️ แผนที่</h2>';
+  for(const k in AREAS){const a=AREAS[k],u=hero.lv>=a.lvReq,bd=G.flags['boss_'+k];
+    h+=`<div class="card ${u?'click':''} r${u?3:1}" ${u?`onclick="explore('${k}')"`:''}>
+      <div class="ct"><span>${a.icon} ${a.name}</span><span class="tag ${u?'g':'r'}">${u?'Lv.'+a.lvReq+'+':'Lv.'+a.lvReq}</span></div>
+      <div class="cd">${a.desc}</div>
+      ${a.boss?`<div class="cd" style="margin-top:4px"><span class="tag ${bd?'gn':'r'}">${bd?'✅ ปราบบอส':'🐉 มีบอส'}</span></div>`:''}
+    </div>`}
+  return h;
+}
+
+function vChar(){
+  const c=CLASSES[hero.cls],r=RACES[hero.race];
+  let h=`<h2 class="sec">👤 ตัวละคร</h2>
+  <div class="card" style="text-align:center">
+    <div style="font-size:42px">${c.icon}</div>
+    <div class="ct" style="justify-content:center;margin-top:2px"><span>${hero.name}</span></div>
+    <div class="cd">${r.icon} ${r.name} • ${c.name} • Lv.${hero.lv}</div>
+  </div>
+  <h2 class="sec">📊 ค่าสถานะ</h2>
+  <div class="card">
+    ${sr('💪 STR',st('str'))}${sr('🏃 DEX',st('dex'))}${sr('🧠 INT',st('int'))}
+    ${sr('❤️ VIT',st('vit'))}${sr('🍀 LUK',st('luk'))}
+  </div>
+  <h2 class="sec">📈 สถานะรวม</h2>
+  <div class="card">
+    ${sr('❤️ HP',maxHp())}${sr('💧 MP',maxMp())}${sr('⚔️ ATK',atk())}${sr('🔮 MAG',mag())}
+    ${sr('🛡️ DEF',def())}${sr('💨 SPD',spd())}${sr('🎯 CRIT',crit().toFixed(1)+'%')}${sr('💨 DODGE',dodge().toFixed(1)+'%')}
+  </div>
+  <h2 class="sec">🎽 อุปกรณ์</h2>`;
+  const sl={weapon:'อาวุธ',armor:'เกราะ',acc:'เครื่องประดับ'};
+  for(const s in sl){const id=G.equip[s],it=id?ITEMS[id]:null;
+    h+=`<div class="card ${it?'click':''} r${it?.r||1}" ${it?`onclick="unequip('${s}')"`:''}>
+      <div class="ct"><span>${it?it.icon+' '+it.name:'— ว่าง —'}</span><span class="tag">${sl[s]}</span></div>
+      ${it?`<div class="cd">${it.desc||''}</div>`:''}
+    </div>`}
+  return h;
+}
+function sr(l,v){return `<div class="srow"><span>${l}</span><span>${v}</span></div>`}
+
+function vBag(){
+  const ks=Object.keys(G.inv).filter(k=>G.inv[k]>0);
+  let h=`<h2 class="sec">🎒 กระเป๋า (${ks.length})</h2>`;
+  if(!ks.length)return h+'<div class="empty">ว่างเปล่า...</div>';
+  const o={use:0,weapon:1,armor:2,acc:3,mat:4};
+  ks.sort((a,b)=>(o[ITEMS[a]?.type]??9)-(o[ITEMS[b]?.type]??9));
+  ks.forEach(id=>{const it=ITEMS[id];if(!it)return;
+    const eq=Object.values(G.equip).includes(id);
+    const canE=it.type==='weapon'||it.type==='armor'||it.type==='acc';
+    h+=`<div class="card r${it.r||1}">
+      <div class="ct"><span>${it.icon} ${it.name} <span class="tag">x${G.inv[id]}</span></span>
+      ${it.price?`<span class="tag g">${it.price}💰</span>`:''}</div>
+      <div class="cd">${it.desc||''}</div>
+      <div class="row" style="margin-top:6px">
+        ${it.type==='use'?`<button class="btn xs grn" onclick="useIt('${id}')">ใช้</button>`:''}
+        ${canE?`<button class="btn xs gold" onclick="equipIt('${id}')">${eq?'ถอด':'สวม'}</button>`:''}
+      </div>
+    </div>`});
+  return h;
+}
+
+function vQuests(){
+  let h='<h2 class="sec">📜 ภารกิจ</h2>';
+  QUESTS.forEach(q=>{
+    const a=G.quests.includes(q.id),d=G.done.includes(q.id);
+    const p=G.prog[q.id]||0,cp=p>=q.cnt;
+    let s=d?'<span class="tag gn">✅ เสร็จ</span>':a&&cp?'<span class="tag g">🎁 รับรางวัล</span>':a?`<span class="tag b">${p}/${q.cnt}</span>`:'<span class="tag">ว่าง</span>';
+    h+=`<div class="card" style="${d?'opacity:.5':''}">
+      <div class="ct"><span>${q.name}</span>${s}</div>
+      <div class="cd">ปราบ ${ENEMIES[q.target].name} ${q.cnt} ตัว</div>
+      <div class="cd">🎁 ${F(q.gold)}💰 • ${q.exp} EXP${q.items.map(i=>', '+ITEMS[i[0]].name+'×'+i[1]).join('')}</div>
+      <div class="row" style="margin-top:6px">
+        ${!a&&!d?`<button class="btn xs" onclick="accQ('${q.id}')">รับ</button>`:''}
+        ${a&&cp?`<button class="btn xs gold" onclick="clmQ('${q.id}')">รับรางวัล</button>`:''}
+      </div>
+    </div>`});
+  return h;
+}
+
+function vSys(){
+  return `<h2 class="sec">⚙️ ระบบ</h2>
+  <div class="card click" onclick="save()"><div class="ct"><span>💾 บันทึก</span></div><div class="cd">เซฟลงเบราว์เซอร์</div></div>
+  <div class="card click" onclick="load()"><div class="ct"><span>📂 โหลด</span></div><div class="cd">โหลดเซฟ</div></div>
+  <div class="card click" onclick="stats()"><div class="ct"><span>📈 สถิติ</span></div><div class="cd">ดูข้อมูลการเล่น</div></div>
+  <div class="card click" onclick="reset()" style="border-color:#e6394655"><div class="ct"><span style="color:var(--red)">🗑️ ลบและเริ่มใหม่</span></div></div>
+  <div class="card"><div class="ct"><span>ℹ️ เกี่ยวกับ</span></div><div class="cd">ตำนานเอลดอเรีย v1.0</div></div>`;
+    }
+   /* ============ ITEM ACTIONS ============ */
+function equipIt(id){const it=ITEMS[id],s=it.type;
+  if(G.equip[s]===id){unequip(s);return}
+  const old=G.equip[s];if(old)addIt(old,1);rmIt(id,1);G.equip[s]=id;
+  hero.hp=K(hero.hp,0,maxHp());hero.mp=K(hero.mp,0,maxMp());
+  toast('สวม '+it.name);render()}
+function unequip(s){const id=G.equip[s];if(!id)return;G.equip[s]=null;addIt(id,1);
+  hero.hp=K(hero.hp,0,maxHp());hero.mp=K(hero.mp,0,maxMp());toast('ถอด');render()}
+function useIt(id){const it=ITEMS[id];let ok=false;
+  if(it.hp){const b=Math.min(it.hp,maxHp()-hero.hp);if(b>0){hero.hp+=b;ok=true}}
+  if(it.mp){const b=Math.min(it.mp,maxMp()-hero.mp);if(b>0){hero.mp+=b;ok=true}}
+  if(it.cure){hero.status={};ok=true}
+  if(!ok)return toast('ไม่จำเป็น');
+  rmIt(id,1);toast('ใช้ '+it.name);render()}
+
+/* ============ SHOP ============ */
+function shop(){
+  let h=`<div style="font-size:11px;color:var(--dim);margin-bottom:8px">💰 ทอง: <b style="color:var(--gold)">${F(G.gold)}</b></div>`;
+  SHOP.forEach(id=>{const it=ITEMS[id];const can=G.gold>=it.price;
+    h+=`<div class="card r${it.r||1}">
+      <div class="ct"><span>${it.icon} ${it.name}</span><span class="tag ${can?'g':'r'}">${it.price}💰</span></div>
+      <div class="cd">${it.desc||''}</div>
+      <button class="btn xs ${can?'gold':''}" style="margin-top:5px;width:100%" ${can?'':'disabled'} onclick="buy('${id}')">ซื้อ</button>
+    </div>`});
+  const sell=Object.keys(G.inv).filter(k=>G.inv[k]>0&&ITEMS[k]?.price);
+  if(sell.length){h+='<h2 class="sec" style="margin-top:10px">💱 ขาย</h2>';
+    sell.forEach(id=>{const it=ITEMS[id];const sp=Math.floor(it.price*0.4);
+      h+=`<div class="card"><div class="ct"><span>${it.icon} ${it.name} ×${G.inv[id]}</span><span class="tag g">${sp}💰</span></div>
+      <button class="btn xs" style="margin-top:5px;width:100%" onclick="sell('${id}')">ขาย 1</button></div>`})}
+  openM('🛒 ร้านค้า',h);
+}
+function buy(id){const it=ITEMS[id];if(G.gold<it.price)return toast('ทองไม่พอ');
+  G.gold-=it.price;addIt(id,1);toast('ซื้อ '+it.name);shop();renderTop()}
+function sell(id){const it=ITEMS[id];if(!cntIt(id))return;const sp=Math.floor(it.price*0.4);
+  rmIt(id,1);G.gold+=sp;toast('+'+sp+'💰');shop();renderTop()}
+function inn(c){if(G.gold<c)return toast('ทองไม่พอ');G.gold-=c;hero.hp=maxHp();hero.mp=maxMp();hero.status={};toast('😴 ฟื้นเต็ม');render()}
+function accQ(id){if(!G.quests.includes(id)){G.quests.push(id);if(G.prog[id]===undefined)G.prog[id]=0;toast('รับภารกิจ')}render()}
+function clmQ(id){const q=QUESTS.find(x=>x.id===id);if((G.prog[id]||0)<q.cnt)return;
+  G.quests=G.quests.filter(x=>x!==id);G.done.push(id);
+  G.gold+=q.gold;gainExp(q.exp);q.items.forEach(([i,n])=>addIt(i,n));
+  toast('🎁 รับรางวัล!');render()}
+function trackK(k){G.kills[k]=(G.kills[k]||0)+1;G.killsTotal=(G.killsTotal||0)+1;
+  G.quests.forEach(qid=>{const q=QUESTS.find(x=>x.id===qid);
+    if(q&&q.target===k){G.prog[qid]=Math.min(q.cnt,(G.prog[qid]||0)+1);
+      if(G.prog[qid]===q.cnt)toast('✅ "'+q.name+'" สำเร็จ!')}})}
+
+/* ============ SAVE / LOAD ============ */
+function save(){try{localStorage.setItem('eldoria',JSON.stringify({hero,G}));toast('💾 บันทึกแล้ว')}catch(e){toast('❌')}}
+function load(){try{const d=localStorage.getItem('eldoria');if(!d)return toast('❌ ไม่มีเซฟ');
+  const o=JSON.parse(d);hero=o.hero;G=o.G;toast('📂 โหลดแล้ว');render()}catch(e){toast('❌ เสียหาย')}}
+function reset(){if(!confirm('ลบทั้งหมด?'))return;localStorage.removeItem('eldoria');location.reload()}
+function stats(){
+  let h=`<div class="card"><div class="ct"><span>📊 สถิติ</span></div>
+    <div class="cd">Lv.${hero.lv}<br>ปราบแล้ว: ${F(G.killsTotal||0)}<br>ทอง: ${F(G.gold)}</div></div>`;
+  for(const k in G.kills||{})if(ENEMIES[k]&&G.kills[k]>0)
+    h+=`<div class="cd">${ENEMIES[k].icon} ${ENEMIES[k].name} × ${G.kills[k]}</div>`;
+  openM('📈 สถิติ',h)}
+
+/* ============ MODAL ============ */
+function openM(t,h){$('#mt').textContent=t;$('#mb').innerHTML=h;$('#modal').classList.add('on')}
+function closeM(){$('#modal').classList.remove('on')}
+
+/* ============ EXP ============ */
+function gainExp(a){hero.exp+=a;
+  while(hero.exp>=nxt()){hero.exp-=nxt();hero.lv++;
+    hero.stats.str++;hero.stats.dex++;hero.stats.int++;hero.stats.vit++;hero.stats.luk++;
+    hero.hp=maxHp();hero.mp=maxMp();toast('🎉 เลเวล '+hero.lv+'!')}
+  renderTop()}
+
+/* ============ EXPLORE ============ */
+function explore(k){
+  const a=AREAS[k];
+  if(hero.lv<a.lvReq)return toast('Lv ไม่พอ');
+  if(hero.hp<=0)return toast('HP หมด พักก่อน');
+  G.area=k;
+  if(a.boss&&!G.flags['boss_'+k]&&C(0.4)){startCB([a.boss],{boss:1,area:k});return}
+  const r=Math.random();
+  if(r<0.68){const n=R(1,a.max),l=[];for(let i=0;i<n;i++)l.push(P(a.pool));startCB(l,{area:k})}
+  else if(r<0.82){const g=R(15,35)*hero.lv+R(10,50);G.gold+=g;toast('💰 พบ '+F(g));render()}
+  else if(r<0.94){const id=P(['potion_s','potion_m','ether','antidote']);addIt(id,1);toast('📦 พบ '+ITEMS[id].name);render()}
+  else toast('🌿 ไม่พบอะไร')
+}
+
+/* ============ COMBAT ============ */
+function mkE(k,i){const E=ENEMIES[k],sc=1+(hero.lv-1)*0.03;
+  return{uid:k+'_'+i+'_'+Math.random(),key:k,name:E.name,icon:E.icon,
+    hp:Math.floor(E.hp*sc),maxHp:Math.floor(E.hp*sc),
+    atk:Math.floor(E.atk*sc),def:E.def,mag:E.mag,spd:E.spd,luk:E.luk,
+    exp:E.exp,gold:E.gold,skills:E.skills,drops:E.drops||[],
+    boss:!!E.boss,alive:true,buffs:{},dots:{},isPlayer:false}}
+
+function startCB(keys,opt={}){
+  hero.status={};hero.buffs={};hero.dots={};
+  const en=keys.map((k,i)=>mkE(k,i));
+  cb={en,sel:0,round:1,order:[],ti:0,over:false,awaiting:false,
+    isBoss:!!opt.boss,area:opt.area};
+  $('#combat').classList.add('on');
+  clog('⚔️ เริ่มการต่อสู้!','y');
+  if(opt.boss)clog('👹 บอสปรากฏตัว!','r');
+  buildOrder();renderCB();setTimeout(nxTurn,400)}
+
+function buildOrder(){
+  const l=[{s:'p',r:hero,spd:eS(hero)+Math.random()*3}];
+  cb.en.forEach(e=>{if(e.alive)l.push({s:'e',r:e,spd:eS(e)+Math.random()*3})});
+  l.sort((a,b)=>b.spd-a.spd);cb.order=l;cb.ti=0}
+
+function eS(c){let b=c.isPlayer?spd():c.spd;if(c.buffs.spd)b*=(1+c.buffs.spd.mult);return Math.max(1,b)}
+function eSt(c,s){let b;
+  if(c.isPlayer)b=s==='atk'?atk():s==='def'?def():s==='mag'?mag():s==='lck'?st('luk'):s==='spd'?spd():1;
+  else b=c[s]||0;
+  if(c.buffs[s])b*=(1+c.buffs[s].mult);return Math.max(0,b)}
+
+function calc(a,d,pw,ty,o={}){
+  const s=ty==='mag'?eSt(a,'mag'):eSt(a,'atk');
+  let df=ty==='mag'?eSt(d,'mag'):eSt(d,'def');
+  if(o.pen)df*=(1-o.pen);
+  let base=pw*s;
+  const mit=100/(100+df*1.15);
+  let dm=base*mit*(0.9+Math.random()*0.2);
+  const lc=st('luk');
+  let cc=K(.03+lc*.005+(o.crit||0),0,.75);
+  if(a.isPlayer)cc=K(crit()/100+(o.crit||0),0,.75);
+  const cr=Math.random()<cc;if(cr)dm*=1.85;
+  const dg=d.buffs.dodge?d.buffs.dodge.mult:0;
+  const dch=d.isPlayer?dodge()/100:dg;
+  if(Math.random()<dch)return{dmg:0,cr:false,dodge:true};
+  return{dmg:Math.max(1,Math.round(dm)),cr,dodge:false}}
+
+function nxTurn(){
+  if(!cb||cb.over)return;
+  if(hero.hp<=0)return endCB(false);
+  if(cb.en.every(e=>!e.alive))return endCB(true);
+  if(cb.ti>=cb.order.length){cb.round++;buildOrder();clog(`— รอบ ${cb.round} —`,'d')}
+  const t=cb.order[cb.ti];
+  if(!t){cb.ti++;return nxTurn()}
+  const e=t.r;
+  if(t.s==='e'&&!e.alive){cb.ti++;return nxTurn()}
+  cb.cur=t;
+  const died=startTE(t);
+  if(died){if(t.s==='p')return endCB(false);cb.ti++;renderCB();return setTimeout(nxTurn,300)}
+  if(t.s==='p'){
+    if(hero.dots.stun){hero.dots.stun--;clog('😵 คุณมึน','r');renderCB();return setTimeout(()=>endPT(),500)}
+    cb.awaiting=true;renderCB()}
+  else{cb.awaiting=false;renderCB();setTimeout(()=>eTurn(e),600)}}
+
+function startTE(t){const e=t.r;let dead=false;
+  for(const s of['poison','burn']){if(e.dots[s]>0){
+    const mh=e.isPlayer?maxHp():e.maxHp,d=Math.max(3,Math.floor(mh*.06));
+    if(e.isPlayer)hero.hp=Math.max(0,hero.hp-d);else{e.hp=Math.max(0,e.hp-d);if(e.hp<=0){e.alive=false;dead=true}}
+    clog(`${s==='poison'?'☠️':'🔥'} ${e.isPlayer?'คุณ':e.name} -${d}`,'e');
+    if(e.isPlayer&&hero.hp<=0)dead=true}}
+  renderTop();renderCB();return dead}
+
+function endTE(t){const e=t.r;
+  for(const k in e.dots)if(e.dots[k]>0)e.dots[k]--;
+  for(const k in e.buffs){if(e.buffs[k].turns!==undefined){e.buffs[k].turns--;if(e.buffs[k].turns<=0)delete e.buffs[k]}}}
+
+function endPT(){
+  if(!cb||cb.over)return;
+  if(cb.cur&&cb.cur.s==='p')endTE(cb.cur);
+  cb.awaiting=false;cb.ti++;renderCB();setTimeout(nxTurn,220)}
+
+function eTurn(e){
+  if(!cb||cb.over||!e.alive)return;
+  const sk=ESK[P(e.skills)];
+  const res=calc(e,hero,sk.power||1,sk.el||'phys');
+  const lb=`${e.icon} ${e.name} ใช้ ${sk.name}`;
+  if(res.dodge)clog(`${lb} — คุณหลบ!`,'g');
+  else{hero.hp=Math.max(0,hero.hp-res.dmg);clog(`${lb} → ${res.dmg}${res.cr?' 💥':''}`,'e')}
+  if(sk.slow&&!res.dodge){hero.buffs.spd={mult:-0.4,turns:3};clog('   ช้าลง!','r')}
+  renderTop();renderCB();
+  if(hero.hp<=0)return setTimeout(()=>endCB(false),500);
+  endTE({r:e});cb.ti++;renderCB();setTimeout(nxTurn,450)}
+
+function addBuff(e,k,m,t){e.buffs[k]={mult:m,turns:t}}
+function getTgt(){return cb.en[cb.sel]}
+
+function pAtk(){
+  if(!cb||!cb.awaiting)return;
+  const tg=getTgt();if(!tg||!tg.alive)return toast('เลือกเป้าหมาย');
+  cb.awaiting=false;const res=calc(hero,tg,1,'phys');
+  const el=document.querySelector(`[data-u="${tg.uid}"]`);
+  if(res.dodge){clog(`⚔️ โจมตี ${tg.name} — พลาด!`,'p');if(el)fDmg(el,'MISS','#8fc4ff')}
+  else{tg.hp=Math.max(0,tg.hp-res.dmg);clog(`⚔️ โจมตี ${tg.name} → ${res.dmg}${res.cr?' 💥':''}`,'p');
+    if(el){fDmg(el,'-'+res.dmg,res.cr?'#ffcc00':'#ff8899');el.classList.add('hit');setTimeout(()=>el.classList.remove('hit'),300)}
+    if(tg.hp<=0)killE(tg)}
+  renderTop();renderCB();
+  if(chkWin())return;endPT()}
+
+function pSk(k){
+  const s=SKILLS[k];if(!s)return;
+  if(hero.mp<s.mp)return toast('MP ไม่พอ');
+  if(hero.lv<s.lv)return toast('Lv ไม่พอ');
+  if(!cb||!cb.awaiting)return;
+  const tg=getTgt();
+  if(!s.self&&!s.all&&(!tg||!tg.alive))return toast('เลือกเป้าหมาย');
+  hero.mp-=s.mp;cb.awaiting=false;
+  clog(`✨ ${s.icon} ${s.name}!`,'p');
+  if(s.type==='buff'){for(const kk in s.buff)addBuff(hero,kk,s.buff[kk],s.buff[kk].turns||s.buff.turns||3)}
+  else if(s.type==='heal'){
+    const amt=Math.floor(mag()*s.power+R(5,15));
+    const real=Math.min(amt,maxHp()-hero.hp);hero.hp+=real;
+    clog(`   ฟื้น HP ${real}`,'g')}
+  else{
+    const tgts=s.all?cb.en.filter(e=>e.alive):[tg];
+    const hits=s.hits||1;
+    tgts.forEach(t=>{
+      for(let i=0;i<hits;i++){
+        if(!t.alive)break;
+        const res=calc(hero,t,s.power,s.type,{pen:s.pen,crit:s.crit});
+        if(res.dodge){clog(`   ${t.name} หลบ`,'d');continue}
+        t.hp=Math.max(0,t.hp-res.dmg);
+        clog(`   → ${t.name} ${res.dmg}${res.cr?' 💥':''}`,'p');
+        const el=document.querySelector(`[data-u="${t.uid}"]`);
+        if(el)fDmg(el,'-'+res.dmg,res.cr?'#ffcc00':'#ff8899');
+        if(s.psn&&t.alive&&C(.75)){t.dots.poison=s.psn;clog(`   ☠️ พิษ!`,'g')}
+        if(s.stun&&t.alive&&C(.7)){t.dots.stun=1;clog(`   💫 มึน!`,'g')}
+        if(t.hp<=0){killE(t);break}}})}
+  renderTop();renderCB();
+  if(chkWin())return;endPT()}
+
+function pFl(){
+  if(!cb||!cb.awaiting)return;
+  if(cb.isBoss)return toast('หนีบอสไม่ได้!');
+  cb.awaiting=false;
+  const sp=spd(),se=Math.max(...cb.en.filter(e=>e.alive).map(e=>eS(e)),1);
+  const p=K(.35+(sp-se)*.03,.15,.9);
+  if(C(p)){clog('🏃 หนีสำเร็จ!','g');renderCB();setTimeout(()=>{closeCB();toast('หนีได้');render()},700)}
+  else{clog('❌ หนีไม่สำเร็จ','e');renderCB();endPT()}}
+
+function pItem(id){
+  const it=ITEMS[id];if(!it)return;let ok=false;
+  if(it.hp){const b=Math.min(it.hp,maxHp()-hero.hp);if(b>0){hero.hp+=b;ok=true}}
+  if(it.mp){const b=Math.min(it.mp,maxMp()-hero.mp);if(b>0){hero.mp+=b;ok=true}}
+  if(!ok)return toast('ไม่จำเป็น');
+  rmIt(id,1);clog(`🧪 ใช้ ${it.name}`,'g');renderTop();renderCB();endPT()}
+
+function killE(e){e.alive=false;clog(`💀 ${e.name} ถูกปราบ!`,'g');
+  const el=document.querySelector(`[data-u="${e.uid}"]`);if(el)el.classList.add('dead')}
+
+function chkWin(){return cb.en.every(e=>!e.alive)}
+
+function endCB(win){
+  if(cb.over)return;cb.over=true;
+  if(!win){
+    clog('💀 คุณพ่ายแพ้...','r');
+    setTimeout(()=>{closeCB();hero.hp=1;render();toast('กลับเมืองด้วย HP 1')},1200);
+    return}
+  clog('🏆 ชนะ!','g');
+  let tg=0,te=0;
+  cb.en.forEach(e=>{
+    tg+=e.gold;te+=e.exp;
+    trackK(e.key);
+    e.drops.forEach(([id,p])=>{if(C(p)){addIt(id,1);clog(`📦 ${ITEMS[id].icon} ${ITEMS[id].name}`,'g')}})
+  });
+  G.gold+=tg;
+  clog(`💰 +${F(tg)} ทอง, +${te} EXP`,'y');
+  gainExp(te);
+  if(cb.isBoss&&cb.area){G.flags['boss_'+cb.area]=true;toast('👑 ปราบบอส!')}
+  setTimeout(()=>{closeCB();render()},1400)}
+
+function closeCB(){$('#combat').classList.remove('on');cb=null}
+
+function renderCB(){
+  if(!cb)return;
+  $('#crd').textContent='รอบ '+cb.round;
+  $('#ctn').textContent=cb.cur?(cb.cur.s==='p'?'เทิร์นคุณ':'เทิร์นศัตรู'):'';
+  $('#el').innerHTML=cb.en.map((e,i)=>
+    `<div class="enemy ${cb.sel===i?'sel':''} ${e.alive?'':'dead'}" data-u="${e.uid}" onclick="selT(${i})">
+      <div class="ename"><span>${e.icon} ${e.name}</span><span class="tag">${e.hp}/${e.maxHp}</span></div>
+      <div class="ehp"><span style="width:${(e.hp/e.maxHp*100)}%"></span></div>
+      ${e.dots.poison>0?'<div style="margin-top:4px"><span class="tag r">☠️ พิษ</span></div>':''}
+    </div>`).join('');
+  $('#cn').textContent=`${CLASSES[hero.cls].icon} ${hero.name}`;
+  $('#cs').textContent='';
+  $('#ch').style.width=(hero.hp/maxHp()*100)+'%';
+  $('#cth').textContent=`HP ${hero.hp}/${maxHp()}`;
+  $('#cm').style.width=(hero.mp/maxMp()*100)+'%';
+  $('#ctm').textContent=`MP ${hero.mp}/${maxMp()}`;
+  if(!cb.en[cb.sel]||!cb.en[cb.sel].alive){
+    const i=cb.en.findIndex(e=>e.alive);
+    if(i>=0)cb.sel=i}}
+
+function selT(i){if(cb.en[i].alive)cb.sel=i;renderCB()}
+
+function clog(m,c='d'){
+  const d=document.createElement('div');d.className=c;d.innerHTML=m;
+  const cl=$('#cl');cl.appendChild(d);cl.scrollTop=cl.scrollHeight;
+  while(cl.children.length>50)cl.removeChild(cl.firstChild)}
+
+function fDmg(el,txt,col){
+  const d=document.createElement('div');d.className='dmg';d.textContent=txt;d.style.color=col;
+  el.appendChild(d);setTimeout(()=>d.remove(),900)}
+            /* ============ INIT ============ */
+$$('.nav-btn').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render()});
+
+$$('#cac .btn').forEach(b=>b.onclick=()=>{
+  const a=b.dataset.a;
+  if(a==='atk')pAtk();
+  else if(a==='sk'){
+    const cl=$('#cmn');cl.style.display='block';
+    cl.innerHTML=CLASSES[hero.cls].skills.map(k=>{const s=SKILLS[k];
+      const ok=hero.mp>=s.mp&&hero.lv>=s.lv;
+      return `<button class="btn sm ${ok?'':'red'}" ${ok?'':'disabled'} onclick="pSk('${k}')">
+        <span>${s.icon} ${s.name}</span><span>MP ${s.mp}</span></button>`}).join('')+
+      '<button class="btn sm red full" onclick="document.getElementById(\'cmn\').style.display=\'none\'">ยกเลิก</button>';
+  }
+  else if(a==='it'){
+    const cl=$('#cmn');cl.style.display='block';
+    const usables=Object.keys(G.inv).filter(k=>G.inv[k]>0&&ITEMS[k]?.type==='use');
+    if(!usables.length){cl.innerHTML='<div class="empty">ไม่มีไอเทม</div>';return}
+    cl.innerHTML=usables.map(id=>`<button class="btn sm full" onclick="pItem('${id}')">
+      <span>${ITEMS[id].icon} ${ITEMS[id].name} ×${G.inv[id]}</span></button>`).join('')+
+      '<button class="btn sm red full" onclick="document.getElementById(\'cmn\').style.display=\'none\'">ยกเลิก</button>';
+  }
+  else if(a==='fl')pFl();
+});
+
+/* ============ START ============ */
+renderCreate();
+</script>
+</body>
+</html>
